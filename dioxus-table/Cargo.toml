@@ -14,3 +14,4 @@ dioxus = { version = "0.5", features = ["web", "router"] }
 log = "0.4.19"
 dioxus-logger = "0.4.1"
 console_error_panic_hook = "0.1.7"
+serde = { version = "1.0.197", features = ["derive"] }
