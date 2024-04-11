@@ -4,7 +4,9 @@ use dioxus::prelude::*;
 use log::LevelFilter;
 
 mod components;
+mod data;
 pub use components::*;
+use data::DATA;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Routable, Debug, PartialEq)]
@@ -29,19 +31,20 @@ fn App() -> Element {
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Data {
+    id: String,
     name: String,
     description: String,
     address: String,
-    age: i32,
+    phone: String,
 }
 
 impl RenderCell for Data {
-    fn render(&self, dataIndex: &'static str) -> Element {
+    fn render(&self, dataIndex: &'static str, _: usize) -> Element {
         match dataIndex {
             "name" => rsx! {  "{self.name}" },
             "description" => rsx! { "{self.description}" },
             "address" => rsx! { "{self.address}" },
-            "age" => rsx! { "{self.age}" },
+            "phone" => rsx! { "{self.phone}" },
             _ => rsx! { "" },
         }
     }
@@ -63,32 +66,27 @@ fn Home() -> Element {
             dataIndex: "address",
         },
         Column {
-            title: "Age",
-            dataIndex: "age",
+            title: "Phone",
+            dataIndex: "phone",
         },
     ];
 
-    let data: Vec<Box<dyn RenderCell>> = vec![
-        Box::new(Data {
-            name: "John Doe".into(),
-            description: "Software Engineer".into(),
-            address: "1234 Elm St".into(),
-            age: 30,
-        }),
-        Box::new(Data {
-            name: "Jane Doe".into(),
-            description: "Software Engineer".into(),
-            address: "1234 Elm St".into(),
-            age: 30,
-        }),
-    ];
+    let data: Vec<Data> = serde_json::from_str(DATA).unwrap();
+
+    let data: Vec<Data> = data.into_iter().take(1000).collect();
 
     rsx! {
         div {
             class: "p-6",
             Table {
-                columns,
-                dataSource: data
+                columns: columns,
+                dataSource: data,
+                on_selected_all: |selectedAll: bool|  {
+                    log::info!("selectedAll: {}", selectedAll)
+                },
+                on_selected_change: |selected: Data|  {
+                    log::info!("selected data: {:?}", selected)
+                }
             }
         }
     }
