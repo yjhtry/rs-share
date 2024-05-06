@@ -1,12 +1,11 @@
 #![allow(non_snake_case)]
 
 use dioxus::prelude::*;
-use log::LevelFilter;
+
+use tracing::Level;
 
 mod components;
-mod data;
 pub use components::*;
-use data::DATA;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Routable, Debug, PartialEq)]
@@ -17,7 +16,7 @@ enum Route {
 
 fn main() {
     // Init debug
-    dioxus_logger::init(LevelFilter::Info).expect("failed to init logger");
+    dioxus_logger::init(Level::INFO).expect("failed to init logger");
     console_error_panic_hook::set_once();
 
     launch(App);
@@ -31,7 +30,7 @@ fn App() -> Element {
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Data {
-    id: String,
+    id: i32,
     name: String,
     description: String,
     address: String,
@@ -71,23 +70,40 @@ fn Home() -> Element {
         },
     ];
 
-    let data: Vec<Data> = serde_json::from_str(DATA).unwrap();
+    let data = use_resource(move || get_data());
+    let data = &*data.read();
 
-    let data: Vec<Data> = data.into_iter().take(1000).collect();
-
-    rsx! {
-        div {
-            class: "p-6",
-            Table {
-                columns: columns,
-                dataSource: data,
-                on_selected_all: |selectedAll: bool|  {
-                    log::info!("selectedAll: {}", selectedAll)
-                },
-                on_selected_change: |selected: Data|  {
-                    log::info!("selected data: {:?}", selected)
+    match data {
+        Some(Ok(list)) => {
+            rsx! {
+                div {
+                    class: "p-6",
+                    Table {
+                        columns: columns,
+                        dataSource: list.clone(),
+                        on_selected_all: |selectedAll: bool|  {
+                            log::info!("selectedAll: {}", selectedAll)
+                        },
+                        on_selected_change: |selected: Data|  {
+                            log::info!("selected data: {:?}", selected)
+                        }
+                    }
                 }
             }
         }
+        _ => rsx! {
+            div {
+                "loading..."
+            }
+        },
     }
+}
+
+pub async fn get_data() -> Result<Vec<Data>, reqwest::Error> {
+    let story = reqwest::get("http://yjh-anything-oss.com/other/people_data.json")
+        .await?
+        .json::<Vec<Data>>()
+        .await?;
+
+    Ok(story)
 }

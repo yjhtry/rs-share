@@ -1,0 +1,3 @@
+[RSW::ERR]
+[RSW::NAME] :~> @wasm/adder
+[RSW::BUILD] :~> wasm-pack build @wasm/adder --out-dir pkg --target web --dev --scope wasm
