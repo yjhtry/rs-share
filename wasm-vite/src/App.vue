@@ -1,6 +1,9 @@
+<script setup lang="ts">
+import Wrap from './Wrap.vue'
+</script>
+
 <template>
-  <main font-sans p="x-4 y-10" text="center gray-700 dark:gray-200">
-    <RouterView />
-    <TheFooter />
-  </main>
+  <Suspense>
+    <Wrap />
+  </Suspense>
 </template>

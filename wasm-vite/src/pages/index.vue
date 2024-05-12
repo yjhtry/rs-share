@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends any, O extends any">
-import init, { add } from '@wasm/adder'
+import { add } from '@wasm/adder'
 
 defineOptions({
   name: 'IndexPage',
@@ -13,11 +13,8 @@ function go() {
     router.push(`/hi/${encodeURIComponent(name.value)}`)
 }
 
-onMounted(async () => {
-  await init()
-  // eslint-disable-next-line no-console
-  console.log(add(11, 11))
-})
+// eslint-disable-next-line no-console
+console.log(add(11, 11))
 </script>
 
 <template>

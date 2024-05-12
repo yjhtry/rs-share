@@ -1,9 +1,0 @@
-[INFO]: 🎯  Checking for the Wasm target...
-[INFO]: 🌀  Compiling to Wasm...
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.00s
-Error: Ensure that you have "wasm-bindgen" as a dependency in your Cargo.toml file:
-[dependencies]
-wasm-bindgen = "0.2"
-Caused by: Ensure that you have "wasm-bindgen" as a dependency in your Cargo.toml file:
-[dependencies]
-wasm-bindgen = "0.2"
