@@ -1,0 +1,11 @@
+[INFO]: 🎯  Checking for the Wasm target...
+Error: wasm32-unknown-unknown target not found in sysroot: "/opt/homebrew/Cellar/rust/1.78.0"
+
+Used rustc from the following path: "/opt/homebrew/bin/rustc"
+It looks like Rustup is not being used. For non-Rustup setups, the wasm32-unknown-unknown target needs to be installed manually. See https://rustwasm.github.io/wasm-pack/book/prerequisites/non-rustup-setups.html on how to do this.
+
+Caused by: wasm32-unknown-unknown target not found in sysroot: "/opt/homebrew/Cellar/rust/1.78.0"
+
+Used rustc from the following path: "/opt/homebrew/bin/rustc"
+It looks like Rustup is not being used. For non-Rustup setups, the wasm32-unknown-unknown target needs to be installed manually. See https://rustwasm.github.io/wasm-pack/book/prerequisites/non-rustup-setups.html on how to do this.
+
